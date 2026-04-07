@@ -20,6 +20,9 @@ jobs:
           distribution: temurin
           cache: maven
 
+      - name: Set release version from tag
+        run: mvn versions:set -DnewVersion=${GITHUB_REF_NAME#v} -DgenerateBackupPoms=false -B
+
       - name: Build, Test and Package
         run: mvn clean verify -B --no-transfer-progress
 
