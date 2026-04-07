@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.flink</groupId>
     <artifactId>flink-roaringbitmap</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
     <name>Flink RoaringBitmap UDFs</name>
     <description>
