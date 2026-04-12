@@ -56,4 +56,15 @@ public class RbOrAggFunction extends AbstractRbAggFunction {
         RoaringBitmap input = BitmapUtils.fromBytes(bitmapBytes);
         acc.or(input);
     }
+
+    /**
+     * Retract is not supported for bitmap OR (union is not reversible).
+     * This method exists to satisfy Flink's streaming GROUP BY planner,
+     * but will throw if actually invoked on a retract stream.
+     */
+    public void retract(RoaringBitmap acc, @Nullable byte[] bitmapBytes) {
+        throw new UnsupportedOperationException(
+                "rb_or_agg does not support retraction. "
+                        + "Use it only on append-only streams.");
+    }
 }

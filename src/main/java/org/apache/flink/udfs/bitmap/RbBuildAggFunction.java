@@ -49,4 +49,15 @@ public class RbBuildAggFunction extends AbstractRbAggFunction {
         }
         acc.add(value);
     }
+
+    /**
+     * Retract is not supported for bitmap build (add is not reversible).
+     * This method exists to satisfy Flink's streaming GROUP BY planner,
+     * but will throw if actually invoked on a retract stream.
+     */
+    public void retract(RoaringBitmap acc, @Nullable Integer value) {
+        throw new UnsupportedOperationException(
+                "rb_build_agg does not support retraction. "
+                        + "Use it only on append-only streams.");
+    }
 }

@@ -18,12 +18,22 @@
 package org.apache.flink.udfs.bitmap;
 
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.table.annotation.DataTypeHint;
+import org.apache.flink.table.annotation.FunctionHint;
 import org.apache.flink.table.functions.AggregateFunction;
 import org.roaringbitmap.RoaringBitmap;
 
 import javax.annotation.Nullable;
 
-/** Shared base for bitmap aggregate UDFs that use {@link RoaringBitmap} as accumulator. */
+/**
+ * Shared base for bitmap aggregate UDFs that use {@link RoaringBitmap} as accumulator.
+ *
+ * <p>The {@code @FunctionHint} annotation with {@code accumulator = @DataTypeHint("RAW")} tells
+ * Flink's Table planner to skip reflection-based POJO extraction and instead use the
+ * {@link TypeInformation} returned by {@link #getAccumulatorType()}, which provides the custom
+ * {@link RoaringBitmapSerializer}.
+ */
+@FunctionHint(accumulator = @DataTypeHint(value = "RAW", bridgedTo = RoaringBitmap.class))
 abstract class AbstractRbAggFunction extends AggregateFunction<byte[], RoaringBitmap> {
 
     @Override
